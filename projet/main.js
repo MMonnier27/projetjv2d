@@ -11,7 +11,7 @@ kaplay({
 // assets
 loadSprite("background", "country-platform-preview.png", {
 })
-loadSprite("sauterelle",   "sauterelle (6).png", {
+loadSprite("sauterelle",   "sauterelle.png", {
   sliceX: 2,
   sliceY: 3,
   anims: {
@@ -25,6 +25,29 @@ loadSprite("serpent", "serpent.png",{
 })
 loadSprite("aigle", "aigle.png",{
 })
+loadSprite("chasseur", "chasseur.png",{
+})
+loadSprite("cactus", "cactus.png",{
+})
+loadSprite("rocher_s", "rocher_s.png");
+loadSprite("rocher_m", "rocher_m.png");
+loadSprite("rocher_l", "rocher_l.png");
+loadSprite("scorpion", "scorpion.png", {
+  sliceX: 2,
+  sliceY: 2,
+  anims: {
+    "idle": { from: 0, to: 2, loop: true },
+    "warn": { from: 0, to: 2, loop: true },
+  }
+});
+loadSprite("nenuphar", "nenuphar.png", {
+  sliceX: 3,
+  sliceY: 1,
+  anims: {
+    "idle": { from: 0, to: 2, loop: true, speed: 3 },  // oscillation lente
+  }
+});
+
 
 // fonction réutilisée
 function addPlateforme(x, y, w, h, col) {
@@ -62,24 +85,53 @@ function makePredatorChase(predator, getPlayer, baseSpeed, accel) {
 scene("start", () => {
   add([rect(width(), height()), color(15, 30, 15), fixed()]);
 
+  // Titre
   add([
-    text("titre", { size: 52 }),
-    pos(center()), anchor("center"), color(168, 212, 90),
+    text("Chain", { size: 58 }),
+    pos(center().x, center().y - 80),
+    anchor("center"),
+    color(168, 212, 90),
   ]);
 
+  // Sous-titre
   add([
-    text("Tu es la proie.\nÉvite le prédateur... \njusqu'à te faire attraper.", { size: 17 }),
-    pos(center().x, center().y + 80), anchor("center"), color(200, 200, 200),
+    text("une histoire de chaîne alimentaire", { size: 13 }),
+    pos(center().x, center().y - 35),
+    anchor("center"),
+    color(100, 160, 100),
   ]);
 
+  // Description
   add([
-    text("Se faire manger = évoluer  ", { size: 14 }),
-    pos(center().x, center().y + 140), anchor("center"), color(150, 200, 150),
+    text("Tu es la proie.\nÉvite le prédateur... jusqu'à te faire attraper.", { size: 16 }),
+    pos(center().x, center().y + 30),
+    anchor("center"),
+    color(200, 200, 200),
   ]);
 
+  // Règle clé
   add([
-    text("espace pour commencer", { size: 16 }),
-    pos(center().x, center().y + 215), anchor("center"), color(100, 160, 100),
+    text("Se faire manger = évoluer", { size: 14 }),
+    pos(center().x, center().y + 95),
+    anchor("center"),
+    color(150, 200, 150),
+  ]);
+
+  // Appel à l'action
+  add([
+    text("— Appuie sur ESPACE pour commencer —", { size: 14 }),
+    pos(center().x, center().y + 145),
+    anchor("center"),
+    color(80, 130, 80),
+  ]);
+
+  // Crédits background
+  add([
+    text("Background : Country Tiles © Ansimuz (ansimuz.com)", { size: 9 }),
+    pos(center().x, height() - 12),
+    anchor("center"),
+    color(60, 90, 60),
+    fixed(),
   ]);
 
   onKeyPress("space", () => go("1"));
@@ -91,29 +143,39 @@ scene("end", () => {
 
   add([
     text("La chaîne est brisée.", { size: 42 }),
-    pos(center().x, center().y - 60), anchor("center"),
+    pos(center().x, center().y - 80), anchor("center"),
     color(255, 100, 80),
   ]);
 
   add([
     text("L'humain ne fait pas partie de la chaîne alimentaire.\nIl est extérieur à elle — et il la détruit.", { size: 15 }),
-    pos(center().x, center().y + 20), anchor("center"),
+    pos(center().x, center().y), anchor("center"),
     color(200, 180, 160),
   ]);
 
   add([
     text("c'est la fin", { size: 22 }),
-    pos(center().x, center().y + 90), anchor("center"),
+    pos(center().x, center().y + 70), anchor("center"),
     color(168, 212, 90),
+  ]);
+
+  // Temps de survie total accumulé
+  add([
+    text(`⏱  Tu as survécu  ${Math.floor(totalSurvivalTime)} secondes  au total.`, { size: 16 }),
+    pos(center().x, center().y + 115), anchor("center"),
+    color(255, 220, 100),
   ]);
 
   add([
     text("ESPACE pour rejouer", { size: 15 }),
-    pos(center().x, center().y + 150), anchor("center"),
+    pos(center().x, center().y + 155), anchor("center"),
     color(110, 110, 110),
   ]);
 
-  onKeyPress("space", () => go("start"));
+  onKeyPress("space", () => {
+    totalSurvivalTime = 0;  // reset pour la prochaine partie
+    go("start");
+  });
 });
 
 
@@ -148,7 +210,7 @@ scene("1", () => {
   const player = add([
     sprite("sauterelle"),
     pos(60, 415), area(), body(),
-    scale(1.5), anchor("botleft"),
+    scale(1), anchor("botleft"),
     "player",
 
   ]);
@@ -207,12 +269,14 @@ scene("1", () => {
     }
   });
 
+  addSurvivalTimer();
+
   player.onCollide("tongue", () =>
-    flashTransition([80, 200, 80], () => go("2"))
+    flashTransition([80, 200, 80], () => go("trans1"))
   );
 
   player.onCollide("predator", () =>
-    flashTransition([80, 200, 80], () => go("2"))
+    flashTransition([80, 200, 80], () => go("trans1"))
   );
 
 
@@ -269,18 +333,15 @@ scene("2", () => {
     recovering:    false,
     recoveryTimer: 0,
     obj: add([
-      rect(w, 10),
+      sprite("nenuphar"),
+      scale(0.38),
       pos(x, y),
-      color(40, 160, 50),
+      anchor("topleft"),
       z(1),
     ]),
-    vein: add([
-      rect(w - 10, 3),
-      pos(x + 5, y + 3),
-      color(30, 130, 40),
-      z(2),
-    ]),
   }));
+
+  leaves.forEach(leaf => leaf.obj.play("idle"));
  
   // joueur — déclaré AVANT onUpdate pour être accessible dans la boucle
   const player = add([
@@ -323,22 +384,16 @@ scene("2", () => {
         leaf.sinkProgress = Math.min(1, leaf.sinkProgress + dt() / SINK_TIME);
         const ny = leaf.baseY + leaf.sinkProgress * SINK_DIST;
         leaf.obj.pos.y  = ny;
-        leaf.vein.pos.y = ny + 3;
- 
-        const r = 40  + Math.floor(leaf.sinkProgress * 150);
-        const g = 160 - Math.floor(leaf.sinkProgress * 100);
-        const b = 50  - Math.floor(leaf.sinkProgress * 30);
-        leaf.obj.color   = rgb(r, g, b);
+
         leaf.obj.opacity  = 1 - leaf.sinkProgress * 0.7;
-        leaf.vein.opacity = leaf.obj.opacity;
- 
+
         if (leaf.sinkProgress >= 1) {
           leaf.sinking       = false;
           leaf.recovering    = true;
           leaf.recoveryTimer = SINK_TIME;
         }
       }
- 
+
       // ── Récupération ─────────────────────────────────────────────────────
       if (leaf.recovering) {
         leaf.recoveryTimer -= dt();
@@ -346,19 +401,12 @@ scene("2", () => {
           leaf.sinkProgress = Math.max(0, leaf.sinkProgress - dt() * 0.4);
           const ny = leaf.baseY + leaf.sinkProgress * SINK_DIST;
           leaf.obj.pos.y  = ny;
-          leaf.vein.pos.y = ny + 3;
-          const r = 40  + Math.floor(leaf.sinkProgress * 150);
-          const g = 160 - Math.floor(leaf.sinkProgress * 100);
-          const b = 50  - Math.floor(leaf.sinkProgress * 30);
-          leaf.obj.color   = rgb(r, g, b);
           leaf.obj.opacity  = 1 - leaf.sinkProgress * 0.7;
-          leaf.vein.opacity = leaf.obj.opacity;
- 
+
           if (leaf.sinkProgress <= 0) {
             leaf.recovering   = false;
             leaf.sinking      = false;
             leaf.obj.opacity  = 1;
-            leaf.vein.opacity = 1;
           }
         }
       }
@@ -384,7 +432,7 @@ scene("2", () => {
   onUpdate(() => {
     predator.pos.y = height() - 22;
     predator.move(snakeDir * 60, 0);
-    predator.flipX = snakeDir > 0;
+    predator.flipX = snakeDir < 0;
     if (predator.pos.x < 10 || predator.pos.x > width() - 60) snakeDir *= -1;
   });
  
@@ -398,8 +446,10 @@ scene("2", () => {
   });
   player.onGround(() => { player.jumpsLeft = 1; });
  
+  addSurvivalTimer();
+
   player.onCollide("predator", () =>
-    flashTransition([160, 90, 20], () => go("snake"))
+    flashTransition([160, 90, 20], () => go("trans2"))
   );
 
 })
@@ -415,78 +465,176 @@ scene("snake", () => {
   // Sol
   addPlateforme(0, 415, 800, 35, [140, 100, 50]);
  
-  // Rochers
+  // Rochers — coordonnées réelles pour la logique de couverture
+  // Le sprite est placé à x + w/2 avec anchor "bot" et scale 0.9
   const rocks = [
-    { x: 60,  y: 330, w: 90,  h: 85 },
-    { x: 280, y: 325, w: 100, h: 90 },
-    { x: 500, y: 330, w: 90,  h: 85 },
-    { x: 660, y: 320, w: 130, h: 95 },
+    { x: 60,  y: 415, w: 90,  h: 85, sprite: "rocher_l" },
+    { x: 280, y: 415, w: 100, h: 90, sprite: "rocher_m" },
+    { x: 500, y: 415, w: 90,  h: 85, sprite: "rocher_m" },
+    { x: 660, y: 415, w: 130, h: 95, sprite: "rocher_l" },
   ];
-  rocks.forEach(({ x, y, w, h }) => {
-    add([rect(w, h),     pos(x, y),           color(90, 70, 45)]);
-    add([rect(w, 6),     pos(x, y),           color(110, 85, 55)]);
-    add([rect(w-8, 4),   pos(x+4, y+h-4),     color(60, 45, 25)]);
+  rocks.forEach(({ x, y, w, sprite: spr }) => {
+    add([
+      sprite(spr),
+      pos(x + w / 2, y),
+      anchor("bot"),
+      scale(0.9),
+    ]);
   });
  
   // Cactus
   [[190, 370], [450, 375], [600, 368]].forEach(([x, y]) => {
-    add([rect(8, 35), pos(x, y),      color(50, 120, 50)]);
-    add([rect(20, 8), pos(x-6, y+10), color(50, 120, 50)]);
+    add([
+        sprite("cactus"),
+        pos(x, y),
+        scale(1),        // ajuste la taille
+        anchor("bot"),
+    ]);
   });
  
   // Joueur — Serpent
   const player = add([
     sprite("serpent"),
     pos(60, 400), area(), body(),
-    scale(1), anchor("botleft"),
+    scale(0.5), anchor("botleft"),
     "player",
   ]);
  
-  // Prédateur — Aigle (cercle + piqué)
+  // Prédateur — Aigle (pas de area/body — mouvement 100% manuel)
   const predator = add([
-  sprite("aigle"),
-  pos(400, 60), area(),
-  scale(0.8),
-  anchor("center"),
-  "predator",
-]);
- 
+    sprite("aigle"),
+    pos(400, 60),
+    scale(1),
+    anchor("center"),
+    "predator",
+  ]);
+
   let eagleState  = "circle";
   let circleAngle = 0;
   let circleTimer = 3;
   let diveTarget  = vec2(0, 0);
   let diveSpeed   = 0;
-  const CX = 400, CY = 90, CR = 130;
- 
+  const CX = 400, CY = 80, CR = 140;
+
+  // ── Scorpions sous les rochers ──────────────────────────────────────────────
+  // ── Scorpion — apparaît à côté du joueur après 5s immobile ──────────────────
+  let stillTimer = 0;
+  let lastX      = 0;
+  let sc         = null;
+
+  player.onCollide("scorpion", () =>
+    flashTransition([200, 80, 20], () => go("trans3"))
+  );
+
+  onUpdate(() => {
+    const moved = Math.abs(player.pos.x - lastX) > 3;
+    lastX = player.pos.x;
+
+    if (moved) {
+      // Le joueur bouge → scorpion disparaît, timer reset
+      stillTimer = 0;
+      if (sc && sc.exists()) { destroy(sc); sc = null; }
+      return;
+    }
+
+    // Seulement sous un rocher
+    const underRock = rocks.some(r =>
+      player.pos.x >= r.x && player.pos.x <= r.x + r.w
+    );
+    if (!underRock) { stillTimer = 0; return; }
+
+    stillTimer += dt();
+
+    // Après 5s : scorpion d'avertissement
+    if (stillTimer >= 5 && stillTimer < 8 && !sc) {
+      sc = add([
+        sprite("scorpion"),
+        pos(player.pos.x + 180, player.pos.y),
+        anchor("bot"),
+        scale(0.5),
+        opacity(0.5),
+        "scorpion_warn",
+      ]);
+      sc.play("idle");
+    }
+
+    // Met à jour la position du scorpion d'avertissement avec le joueur
+    if (sc && sc.exists() && sc.is("scorpion_warn")) {
+      sc.pos.x = player.pos.x + 180;
+      sc.pos.y = player.pos.y;
+    }
+
+    // Après 8s : détruire l'avertissement et créer le scorpion dangereux
+    if (stillTimer >= 8 && sc && sc.is("scorpion_warn")) {
+      destroy(sc); sc = null;
+    }
+    if (stillTimer >= 8 && !sc) {
+      sc = add([
+        sprite("scorpion"),
+        pos(player.pos.x + 180, player.pos.y),
+        anchor("bot"),
+        scale(0.6),
+        "scorpion_danger",
+      ]);
+      sc.play("idle");
+      stillTimer = 0;
+    }
+
+    // Le scorpion dangereux marche vers le joueur
+    if (sc && sc.exists() && sc.is("scorpion_danger")) {
+      const dx = player.pos.x - sc.pos.x;
+      sc.move(dx > 0 ? 80 : -80, 0);
+      sc.flipX = dx < 0;
+      sc.pos.y = player.pos.y;   // reste au sol
+
+      // Détection par distance — pas besoin de area()
+      if (Math.abs(dx) < 25) {
+        flashTransition([200, 80, 20], () => go("trans3"));
+      }
+    }
+  });
+
   onUpdate(() => {
     if (eagleState === "circle") {
       circleAngle += dt() * 1.5;
       predator.pos.x = CX + Math.cos(circleAngle) * CR;
-      predator.pos.y = CY + Math.sin(circleAngle) * 40;
+      predator.pos.y = CY + Math.sin(circleAngle) * 35;
+      predator.flipX = Math.cos(circleAngle) < 0;
       circleTimer -= dt();
       if (circleTimer <= 0) {
+        // Piquer même si sous un rocher — l'aigle cible la dernière position
         eagleState  = "dive";
         diveTarget  = vec2(player.pos.x, player.pos.y);
-        diveSpeed   = 350;
+        diveSpeed   = 320;
         circleTimer = 3 + Math.random() * 2;
       }
     }
+
     if (eagleState === "dive") {
       const dir = diveTarget.sub(predator.pos).unit();
       predator.move(dir.scale(diveSpeed));
-      diveSpeed = Math.min(diveSpeed + 200 * dt(), 500);
-      if (predator.pos.dist(diveTarget) < 20 || predator.pos.y > height() - 30) {
+      diveSpeed = Math.min(diveSpeed + 180 * dt(), 480);
+
+      // Arrêt du piqué : cible atteinte OU trop bas
+      // Ne s'arrête PLUS si joueur à l'abri — l'aigle va jusqu'au bout
+      const reachedTarget = predator.pos.dist(diveTarget) < 30;
+      const tooLow        = predator.pos.y > 390;
+
+      if (reachedTarget || tooLow) {
         eagleState  = "circle";
         circleAngle = Math.atan2(predator.pos.y - CY, predator.pos.x - CX);
+        if (tooLow) predator.pos.y = CY;
+      }
+
+      // Collision manuelle uniquement hors rocher
+      const underRock = rocks.some(r =>
+        player.pos.x >= r.x - 5 && player.pos.x <= r.x + r.w + 5
+      );
+      if (!underRock && predator.pos.dist(player.pos) < 35) {
+        flashTransition([210, 160, 40], () => go("trans3"));
       }
     }
-    // Sous un rocher → annule le piqué
-    const safe = rocks.some(r =>
-      player.pos.x + 10 >= r.x && player.pos.x <= r.x + r.w
-    );
-    if (safe && eagleState === "dive" && predator.pos.y > 300) {
-      eagleState = "circle"; circleTimer = 2;
-    }
+
   });
  
   // Contrôles — horizontal uniquement
@@ -508,9 +656,7 @@ scene("snake", () => {
     player.pos.x = clamp(player.pos.x, 0, width() - 50);
   });
  
-  player.onCollide("predator", () =>
-    flashTransition([210, 160, 40], () => go("eagle"))
-  );
+  addSurvivalTimer();
  
   player.onUpdate(() => {
     if (player.pos.y > height() + 60) player.pos = vec2(60, 400);
@@ -542,6 +688,7 @@ scene("eagle", () => {
     pos(60, 200),
     scale(0.8),
     anchor("center"),
+    z(5),   // au-dessus du fond, sous le flash
   ]);
 
   // Trajectoire de vol libre : courbe sinusoïdale paisible
@@ -571,9 +718,10 @@ scene("eagle", () => {
 
   // ── Humain — apparaît plus tard ───────────────────────────────────────────
   const human = add([
-    rect(22, 38),
-    pos(750, height() - 90),
-    color(230, 190, 150),
+    sprite("chasseur"),
+    pos(750, height() - 55),
+    scale(2),
+    anchor("bot"),
     opacity(0),
   ]);
 
@@ -639,14 +787,133 @@ scene("eagle", () => {
     }
 
     if (phase === "fall") {
-      // Chute avec rotation — l'aigle tombe
       fallVel += dt() * 300;
       eagle.pos.y += fallVel * dt();
-      eagle.angle  = Math.min(eagle.angle + dt() * 120, 110); // tourne sur lui-même
-      eagle.color   = rgb(180, 100, 30);
+      // Retourner l'aigle tête en bas avec flipY
+      eagle.flipY = true;
     }
   });
 });
 
-// ── Lancement ────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// TRANSITIONS NARRATIVES
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Timer de survie global — s'accumule sur tous les niveaux ─────────────────
+let totalSurvivalTime = 0;
+
+function addSurvivalTimer() {
+  const label = add([
+    text("⏱ 0s", { size: 13 }),
+    pos(width() - 10, 10),
+    anchor("topright"),
+    color(255, 220, 100),
+    fixed(), z(50),
+  ]);
+
+  onUpdate(() => {
+    totalSurvivalTime += dt();
+    label.text = `⏱ ${Math.floor(totalSurvivalTime)}s`;
+  });
+}
+
+function makeTransition(narratif, fait, animal, couleurFond, couleurTexte, nextScene) {
+  add([rect(width(), height()), color(...couleurFond), fixed()]);
+
+  // Texte narratif
+  const msg = add([
+    text(narratif, { size: 19, width: 580, align: "center" }),
+    pos(center().x, center().y - 60),
+    anchor("center"),
+    color(...couleurTexte),
+    opacity(0), fixed(), z(10),
+  ]);
+
+  // Séparateur
+  const sep = add([
+    rect(400, 1),
+    pos(center().x - 200, center().y + 10),
+    color(...couleurTexte),
+    opacity(0), fixed(), z(10),
+  ]);
+
+  // Label "Le savais-tu ?"
+  const label = add([
+    text(`🔎  Le savais-tu — ${animal}`, { size: 11 }),
+    pos(center().x, center().y + 25),
+    anchor("center"),
+    color(...couleurTexte),
+    opacity(0), fixed(), z(10),
+  ]);
+
+  // Fait scientifique
+  const factMsg = add([
+    text(fait, { size: 14, width: 560, align: "center" }),
+    pos(center().x, center().y + 65),
+    anchor("center"),
+    color(...couleurTexte),
+    opacity(0), fixed(), z(10),
+  ]);
+
+  // Hint
+  const hint = add([
+    text("— Appuie sur ESPACE pour continuer —", { size: 12 }),
+    pos(center().x, height() - 35),
+    anchor("center"),
+    color(...couleurTexte),
+    opacity(0), fixed(), z(10),
+  ]);
+
+  // Animations
+  tween(0, 1, 1.2, (v) => {
+    msg.opacity   = v;
+    sep.opacity   = v * 0.5;
+    label.opacity = v;
+    factMsg.opacity = v;
+  });
+  wait(1.5, () => tween(0, 0.7, 0.8, (v) => (hint.opacity = v)));
+
+  onKeyPress("space", () => go(nextScene));
+}
+
+// ── Transition 1 : Insecte → Grenouille ──────────────────────────────────────
+scene("trans1", () => {
+  makeTransition(
+    "Tu as été avalé.\nMais quelque chose a changé.\nTu es plus grand. Plus fort.\nLa chaîne tourne.",
+    "La sauterelle peut sauter jusqu'à 20 fois\nla longueur de son propre corps.\nElle perçoit les vibrations du sol\navant même d'entendre le prédateur.",
+    "La Sauterelle",
+    [15, 45, 15],
+    [150, 220, 130],
+    "2"
+  );
+});
+
+// ── Transition 2 : Grenouille → Serpent ──────────────────────────────────────
+scene("trans2", () => {
+  makeTransition(
+    "La mare était ton monde.\nElle ne l'est plus.\nUn autre règne ici maintenant —\net c'est toi.",
+    "La grenouille attrape ses proies\ngrâce à une langue collante projetée\nen moins de 0.07 secondes —\nplus rapide que le clignement d'un œil.",
+    "La Grenouille",
+    [20, 20, 35],
+    [160, 200, 255],
+    "snake"
+  );
+});
+
+// ── Transition 3 : Serpent → Aigle ───────────────────────────────────────────
+scene("trans3", () => {
+  makeTransition(
+    "Tu as rampé.\nTu as survécu.\nLe ciel s'ouvre.",
+    "Le serpent ne peut pas réguler\nsa propre température — il utilise\nle sol chaud et l'ombre des rochers\npour survivre à la chaleur du désert.",
+    "Le Serpent",
+    [10, 10, 20],
+    [255, 220, 100],
+    "eagle"
+  );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LANCEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
 go("start");
