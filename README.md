@@ -3,6 +3,8 @@
 Bienvenue dans **Chain**, un jeu de plateforme 2D où survivre au prédateur n'est pas une fin en soi, c'est le début d'une transformation. Explore la chaîne alimentaire de l'intérieur et découvre ce qui se passe quand quelque chose d'extérieur vient tout briser. 🪲
 
 ## Aperçu du Jeu 🌿
+<img width="1078" height="609" alt="Capture d’écran 2026-06-25 à 17 48 04" src="https://github.com/user-attachments/assets/99759771-8fc2-42b0-8dc0-4bfb48487d89" />
+
 
 ### Description 🐍
 
