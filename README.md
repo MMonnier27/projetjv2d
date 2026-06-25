@@ -22,27 +22,24 @@ Chain n'est pas un platformer ordinaire — c'est une expérience de la chaîne 
 
 ## Crédits 🌟
 
-- **🧩 Concept et Développement :** Patrick Monnier
-- **🎨 Assets graphiques :** La majorité des sprites ont été créés sur [Piskel](https://www.piskelapp.com). Le reste provient de ressources libres de droits.
-- **🖼️ Backgrounds :**
+- Code : écrit par Maxime Monnier
+- Assets graphiques :** La majorité des sprites ont été créés sur [Piskel](https://www.piskelapp.com). Le reste provient de ressources libres de droits.
+- Backgrounds :**
     - [Country Tiles © Ansimuz](https://ansimuz.com)
     - [The Swamp © Reddit r/PixelArt](https://www.reddit.com/r/PixelArt/comments/7tvkuo/occc_the_swamp/)
     - [Desert Background © OpenGameArt](https://opengameart.org/content/desert-background-0)
     - [Simple Sky Background © OpenGameArt](https://opengameart.org/content/simple-sky-background)
-- **🎵 Musique :**
+-  Musique :**
     - [Awake MegaWall 10 © OpenGameArt](https://opengameart.org/content/awake-megawall-10)
-- **🔊 Sons :**
+-  Sons :**
     - [Superphat, Stuniverso — Freesound.org (CC0)](https://freesound.org)
     - [freesound_community — Pixabay](https://pixabay.com)
-- **💻 Moteur :** [Kaplay.js](https://kaplayjs.com)
-- **🤖 Assistance au code :** Des parties du code ont été légèrement révisées par [Anthropic, Claude](https://claude.ai)
+- Moteur :** [Kaplay.js](https://kaplayjs.com)
+- Assistance au code :** Des parties du code ont été légèrement révisées par [Anthropic, Claude](https://claude.ai)
 
 ## Jouez sur itch.io ! 🎮
 
 Le jeu est disponible sur [itch.io](https://itch.io) ! Cliquez sur **RUN GAME** et bonne chance ! 🌿
 
-```
-Se faire manger = évoluer
-```
 
 Projet réalisé dans le cadre du cours "Jeu vidéo 2D" à l'Université de Lausanne, enseigné par Loic Cattani
