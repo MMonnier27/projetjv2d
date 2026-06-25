@@ -159,7 +159,7 @@ scene("end", () => {
   ]);
 
   add([
-    text("L'humain ne fait pas partie de la chaîne alimentaire.\nIl est extérieur à elle — et il la détruit.", { size: 15 }),
+    text("L'humain est ancré dans la chaîne alimentaire,\nmais son empreinte bouscule tous les équilibres naturels.\nPlus qu'un simple maillon, il est celui qui brise le cycle.", { size: 15 }),
     pos(center().x, center().y), anchor("center"),
     color(200, 180, 160),
   ]);
@@ -771,7 +771,7 @@ scene("eagle", () => {
 
         // Acte 4 : l'aigle tombe
         phase = "fall";
-        showCaption("L'humain ne fait pas partie de la chaîne.\nIl est extérieur à elle — et il la brise.", 4, () => {
+        showCaption("L'humain est ancré dans la chaîne alimentaire, mais son empreinte bouscule tous les équilibres naturels. Plus qu'un simple maillon, il est celui qui brise le cycle..", 8, () => {
 
           // Acte 5 : fondu au noir → écran de fin
           const blackout = add([
