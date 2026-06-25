@@ -39,7 +39,7 @@ Chain n'est pas un platformer ordinaire — c'est une expérience de la chaîne 
 
 ## Jouez sur itch.io ! 🎮
 
-Le jeu est disponible sur [itch.io](https://itch.io) ! Cliquez sur **RUN GAME** et bonne chance ! 🌿
+Le jeu est disponible sur [itch.io](https://maximemo.itch.io/chain) ! Cliquez sur **RUN GAME** et bonne chance ! 🌿
 
 
 Projet réalisé dans le cadre du cours "Jeu vidéo 2D" à l'Université de Lausanne, enseigné par Loic Cattani
