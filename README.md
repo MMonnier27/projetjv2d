@@ -22,7 +22,7 @@ Chain n'est pas un platformer ordinaire — c'est une expérience de la chaîne 
 
 
 
-## Crédits 🌟
+## Crédits 
 
 - Code : écrit par Maxime Monnier
 - Assets graphiques : La majorité des sprites ont été créés sur [Piskel](https://www.piskelapp.com). Le reste provient de ressources libres de droits.
