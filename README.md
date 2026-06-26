@@ -1,23 +1,23 @@
-# Chain 🌿
+# Chain 
 
-Bienvenue dans **Chain**, un jeu de plateforme 2D où survivre au prédateur n'est pas une fin en soi, c'est le début d'une transformation. Explore la chaîne alimentaire de l'intérieur et découvre ce qui se passe quand quelque chose d'extérieur vient tout briser. 🪲
+Bienvenue dans **Chain**, un jeu de plateforme 2D où survivre au prédateur n'est pas une fin en soi, c'est le début d'une transformation. Explore la chaîne alimentaire de l'intérieur et découvre ce qui se passe quand quelque chose d'extérieur vient tout briser. 
 
-## Aperçu du Jeu 🌿
+## Aperçu du Jeu 
 <img width="1078" height="609" alt="Capture d’écran 2026-06-25 à 17 48 04" src="https://github.com/user-attachments/assets/99759771-8fc2-42b0-8dc0-4bfb48487d89" />
 
 
-### Description 🐍
+### Description 
 
 Chain n'est pas un platformer ordinaire — c'est une expérience de la chaîne alimentaire vécue de l'intérieur. Tu commences petit, vulnérable, pourchassé. Quand le prédateur t'attrape, tu ne perds pas, tu deviens lui. Et la chasse recommence, plus haut dans la chaîne.
 
 
 
-### Mécaniques 🦅
+### Mécaniques 
 
-- **🪲 Sauterelle :** Saute sur les plateformes, évite la langue de la grenouille qui te pourchasse au sol
-- **🐸 Grenouille :** Bondi entre les feuilles de nénuphar qui s'affaissent sous ton poids, pendant que le serpent attend patiemment en bas
-- **🐍 Serpent :** File à toute vitesse au sol, abrite-toi sous les rochers quand l'aigle pique du ciel  mais attention au scorpion qui finit par sortir
-- **🦅 Aigle :** Tu es au sommet... jusqu'à ce que quelque chose d'extérieur à la chaîne surgisse
+- ** Sauterelle :** Saute sur les plateformes, évite la langue de la grenouille qui te pourchasse au sol
+- ** Grenouille :** Bondi entre les feuilles de nénuphar qui s'affaissent sous ton poids, pendant que le serpent attend patiemment en bas
+- ** Serpent :** File à toute vitesse au sol, abrite-toi sous les rochers quand l'aigle pique du ciel  mais attention au scorpion qui finit par sortir
+- ** Aigle :** Tu es au sommet... jusqu'à ce que quelque chose d'extérieur à la chaîne surgisse
 
 
 
@@ -39,9 +39,9 @@ Chain n'est pas un platformer ordinaire — c'est une expérience de la chaîne 
 - Moteur : [Kaplay.js](https://kaplayjs.com)
 - Assistance au code :** Des parties du code ont été légèrement révisées par [Anthropic, Claude](https://claude.ai)
 
-## Jouez sur itch.io ! 🎮
+## Jouez sur itch.io ! 
 
-Le jeu est disponible sur [itch.io](https://maximemo.itch.io/chain) ! Cliquez sur **RUN GAME** et bonne chance ! 🌿
+Le jeu est disponible sur [itch.io](https://maximemo.itch.io/chain) ! Cliquez sur **RUN GAME** et bonne chance ! 
 
 
 Projet réalisé dans le cadre du cours "Jeu vidéo 2D" à l'Université de Lausanne, enseigné par Loic Cattani
